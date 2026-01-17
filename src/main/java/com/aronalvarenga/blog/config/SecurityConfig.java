@@ -21,8 +21,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/articles/published/**").permitAll()
                 .requestMatchers("/api/v1/articles/search").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
             .httpBasic(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable);
 

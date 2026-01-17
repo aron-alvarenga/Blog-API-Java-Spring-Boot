@@ -5,7 +5,7 @@ Blog API desenvolvida em Java utilizando Spring Boot Framework e MySQL, seguindo
 
 ## 🚀 Tecnologias e Ferramentas
 
-- **Java 17** - Linguagem de programação
+- **Java 21** - Linguagem de programação
 - **Spring Boot 3.2.0** - Framework para desenvolvimento Back-End
 - **Spring Security** - Segurança e autenticação
 - **Spring Data JPA** - Framework para acesso a dados com ORM
@@ -13,7 +13,8 @@ Blog API desenvolvida em Java utilizando Spring Boot Framework e MySQL, seguindo
 - **Spring Actuator** - Monitoramento e métricas
 - **Lombok** - Redução de código boilerplate
 - **MapStruct** - Mapeamento entre DTOs e entidades
-- **MySQL** - Sistema de gerenciamento de banco de dados
+- **MySQL** - Sistema de gerenciamento de banco de dados (produção)
+- **H2 Database** - Banco de dados em memória (desenvolvimento)
 - **Maven** - Gerenciamento de dependências e build
 - **JUnit 5** - Framework de testes
 - **Mockito** - Framework de mocking para testes
@@ -47,16 +48,20 @@ src/main/java/com/aronalvarenga/blog/
 ## 🔧 Configuração
 
 ### Pré-requisitos
-- Java 17+
+- Java 21+
 - Maven 3.6+
-- MySQL 8.0+
+- MySQL 8.0+ (apenas para produção)
+- H2 Database (incluído automaticamente para desenvolvimento)
 
 ### Variáveis de Ambiente
-Configure as seguintes variáveis de ambiente:
+
+**⚠️ IMPORTANTE:** No modo desenvolvimento, a aplicação usa H2 em memória automaticamente. Você **NÃO precisa** configurar variáveis de ambiente para desenvolvimento.
+
+As variáveis de ambiente são necessárias **apenas para produção** (quando usar MySQL):
 
 ```bash
-# Database
-export DATABASE_URL="jdbc:mysql://localhost:3306/blog_db?useTimezone=true&serverTimezone=UTC&createDatabaseIfNotExist=true"
+# Database (apenas para produção)
+export DATABASE_URL="jdbc:mysql://localhost:3306/blog_db?useTimezone=true&serverTimezone=UTC"
 export DATABASE_USERNAME="root"
 export DATABASE_PASSWORD="sua_senha"
 
@@ -68,13 +73,46 @@ Para mais detalhes, consulte o arquivo [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.
 
 ## 🚀 Executando a Aplicação
 
-### Desenvolvimento
+### Desenvolvimento (com H2 em memória)
+
+**Windows (PowerShell):**
+```powershell
+# Opção 1: Com aspas (RECOMENDADO)
+mvn spring-boot:run "-Dspring-boot.run.profiles=dev"
+
+# Opção 2: Usando variável de ambiente
+$env:SPRING_PROFILES_ACTIVE="dev"
+mvn spring-boot:run
+
+# Opção 3: Sem especificar profile (usa 'dev' por padrão)
+mvn spring-boot:run
+```
+
+**Linux/macOS ou CMD:**
 ```bash
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-### Produção
+**Nota:** No modo desenvolvimento, a aplicação usa H2 em memória. Não é necessário configurar MySQL ou variáveis de ambiente.
+
+### Produção (com MySQL)
+
+**Windows (PowerShell):**
+```powershell
+# Configure as variáveis de ambiente primeiro
+$env:DATABASE_URL="jdbc:mysql://localhost:3306/blog_db?useTimezone=true&serverTimezone=UTC"
+$env:DATABASE_USERNAME="root"
+$env:DATABASE_PASSWORD="sua_senha"
+
+# Execute a aplicação
+mvn spring-boot:run "-Dspring-boot.run.profiles=prod"
+```
+
+**Linux/macOS ou CMD:**
 ```bash
+export DATABASE_URL="jdbc:mysql://localhost:3306/blog_db?useTimezone=true&serverTimezone=UTC"
+export DATABASE_USERNAME="root"
+export DATABASE_PASSWORD="sua_senha"
 mvn spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
@@ -86,6 +124,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=prod
 - `GET /api/v1/articles/published/search?title=termo` - Busca artigos publicados por título
 - `GET /api/v1/articles/{id}` - Busca artigo por ID
 - `GET /actuator/health` - Health check
+- `GET /h2-console` - Console H2 (apenas em desenvolvimento)
 
 ### Endpoints Protegidos
 - `GET /api/v1/articles` - Lista todos os artigos
