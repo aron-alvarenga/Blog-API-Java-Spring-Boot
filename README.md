@@ -470,6 +470,15 @@ A aplicação inclui Spring Actuator para monitoramento:
 - Configuração de banco de dados otimizada
 - Configuração de logging por ambiente
 
+## Novo Direcionamento
+* Transformar em um CMS completo incluindo:
+    * **Conteúdo**: artigos com rascunho/publicação, slug, SEO (meta title/description), versões.
+    * **Autoria**: usuários + papéis (ADMIN/EDITOR/AUTHOR).
+    * **Mídia**: upload de imagens (mesmo que inicialmente local), capa do post.
+    * **Moderação**: comentários com aprovação, anti-spam simples.
+    * **Observabilidade**: logs, métricas, health checks, tracing opcional.
+    * **Infra/entrega**: Docker Compose + MySQL/Postgres, Flyway, CI.
+
 
 ## Contribuindo
 
